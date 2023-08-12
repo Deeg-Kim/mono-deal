@@ -1,0 +1,26 @@
+{
+  "families": [
+    {
+      "color": "brown",
+      "full_set": 2,
+      "rent": [1, 2]
+    },
+    {
+      "color": "blue",
+      "full_set": 2,
+      "rent": [3, 8]
+    }
+  ],
+  "cards": [
+    {
+      "type": "property",
+      "family": "brown",
+      "name": "Baltic Avenue"
+    },
+    {
+      "type": "property",
+      "family": "brown",
+      "name": "Mediterranean Avenue"
+    }
+  ]
+}
