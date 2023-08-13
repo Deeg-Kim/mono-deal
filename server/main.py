@@ -8,7 +8,6 @@ from util.deck import read_deck_from_file
 app = FastAPI()
 app.include_router(games.router)
 
-read_deck_from_file()
 
 @app.exception_handler(NotFoundError)
 async def validation_exception_handler(request, exc):

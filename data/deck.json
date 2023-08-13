@@ -9,6 +9,11 @@
       "color": "blue",
       "full_set": 2,
       "rent": [3, 8]
+    },
+    {
+      "color": "green",
+      "full_set": 3,
+      "rent": [2, 4, 7]
     }
   ],
   "cards": [
@@ -23,6 +28,36 @@
       "cash_value": 1,
       "family": "brown",
       "name": "Mediterranean Avenue"
+    },
+    {
+      "type": "property",
+      "cash_value": 4,
+      "family": "blue",
+      "name": "Boardwalk"
+    },
+    {
+      "type": "property",
+      "cash_value": 4,
+      "family": "blue",
+      "name": "Park Place"
+    },
+    {
+      "type": "property",
+      "cash_value": 4,
+      "family": "green",
+      "name": "North Carolina Avenue"
+    },
+    {
+      "type": "property",
+      "cash_value": 4,
+      "family": "green",
+      "name": "Pacific Avenue"
+    },
+    {
+      "type": "property",
+      "cash_value": 4,
+      "family": "green",
+      "name": "Pennsylvania Avenue"
     }
   ]
 }

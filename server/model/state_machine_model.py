@@ -22,10 +22,6 @@ class State(ABC):
     def evaluate(self, action_context: Optional[ActionContext]) -> str:
         raise NotImplementedError
 
-    @abstractmethod
-    def is_terminal(self) -> bool:
-        raise NotImplementedError
-
 
 class StateMachine(ABC):
 
@@ -46,6 +42,5 @@ class StateMachine(ABC):
     def action(self, action_context: Optional[ActionContext] = None):
         action = self.states[self.current_state_id].evaluate(action_context)
         next_state_id = self.transitions[self.current_state_id][action]
-        logger.info(f"[{self.current_state_id}] --[{action}]--> [{next_state_id}]")
         print(f"[{self.current_state_id}] --[{action}]--> [{next_state_id}]")
         self.current_state_id = next_state_id

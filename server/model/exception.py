@@ -4,3 +4,7 @@ class NotFoundError(Exception):
 
 class InvalidRequestError(Exception):
     pass
+
+
+class InvalidGameStateError(Exception):
+    pass

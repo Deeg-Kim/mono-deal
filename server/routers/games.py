@@ -7,7 +7,9 @@ from model.base import Game, GamePlayer, GameStatus
 from model.exception import InvalidRequestError
 from model.games_api import AddPlayerRequest
 from storage.game_db import GamesDB, get_games_db
+from storage.state_machine_storage import StateMachineStorage, get_state_machine_storage
 from util.consts import MAX_PLAYERS_PER_GAME, DEFAULT_TURN_COUNT
+from util.deck import BASE_DECK
 
 router = APIRouter(prefix="/game")
 
@@ -23,7 +25,7 @@ async def new_game(
         games_db: Annotated[GamesDB, Depends(get_games_db)]
 ):
     game_id = str(uuid.uuid4())
-    game = Game(id=game_id, players=[], status=GameStatus.WAITING_FOR_PLAYERS)
+    game = Game(id=game_id, players=[], status=GameStatus.WAITING_FOR_PLAYERS, deck=BASE_DECK.copy())
 
     games_db.insert_game(game)
 
@@ -48,11 +50,12 @@ async def add_player(
     return game
 
 
-@router.post("/{id}/status", name="Start game", description="Start an existing game")
+@router.post("/{id}/status", name="Change a game status", description="Change a game status")
 async def start_game(
         id: str,
         to: GameStatus,
         games_db: Annotated[GamesDB, Depends(get_games_db)],
+        state_machine_storage: Annotated[StateMachineStorage, Depends(get_state_machine_storage)]
 ) -> Game:
     game = games_db.get_game(id)
 
@@ -62,4 +65,16 @@ async def start_game(
     game.status = to
     games_db.update_game(game)
 
+    if to == GameStatus.STARTED:
+        state_machine_storage.start_new_game(game)
+        state_machine_storage.get_game_state_machine(game.id).action()
+
     return game
+
+
+@router.post("/{id}/turn", name="Take turn", description="Reflect a player action")
+async def take_turn(
+        id: str,
+        games_db: Annotated[GamesDB, Depends(get_games_db)],
+) -> Game:
+    pass

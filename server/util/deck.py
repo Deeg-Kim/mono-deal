@@ -5,7 +5,7 @@ from model.base import PropertyCardFamily, Deck, PropertyCard, CardType
 
 
 def read_deck_from_file() -> Deck:
-    deck = Deck(cards=[])
+    deck = Deck(cards=[], discard_pile=[])
 
     with open("./data/deck.json", "r") as f:
         contents = f.read()
@@ -26,5 +26,7 @@ def read_deck_from_file() -> Deck:
                 card = PropertyCard(type=CardType.PROPERTY, cash_value=cash_value, family=family, name=name)
                 deck.add_card(card)
 
-    print(deck)
     return deck
+
+
+BASE_DECK = read_deck_from_file()
