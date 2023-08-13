@@ -1,13 +1,14 @@
 from abc import ABC, abstractmethod
+from typing import List
 
-from model.base import Game
+from model.base import Game, GameStatus
 from model.exception import NotFoundError
 
 
 class GamesDB(ABC):
 
     @abstractmethod
-    def get_game(self, game_id: str):
+    def get_game(self, game_id: str) -> Game:
         raise NotImplementedError
 
     @abstractmethod
@@ -18,13 +19,17 @@ class GamesDB(ABC):
     def update_game(self, game: Game):
         raise NotImplementedError
 
+    @abstractmethod
+    def get_games_by_status(self, game_status: GameStatus) -> List[Game]:
+        raise NotImplementedError
+
 
 class GamesDBInMemory(GamesDB):
     def __init__(self):
         super().__init__()
         self.memory = {}
 
-    def get_game(self, game_id: str):
+    def get_game(self, game_id: str) -> Game:
         if game_id not in self.memory:
             raise NotFoundError(f"Could not find game with id {game_id}")
 
@@ -38,6 +43,15 @@ class GamesDBInMemory(GamesDB):
             raise NotFoundError(f"Could not find game with id {game.id}")
 
         self.memory[game.id] = game
+
+    def get_games_by_status(self, game_status: GameStatus) -> List[Game]:
+        res = []
+
+        for game in self.memory.values():
+            if game.status == game_status:
+                res.append(game)
+
+        return res
 
 
 games_db = GamesDBInMemory()

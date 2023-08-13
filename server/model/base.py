@@ -124,3 +124,13 @@ class Game(BaseModel):
                 return player
 
         raise NotFoundError(f"No player with id {player_id}")
+
+
+class MinimalGame(BaseModel):
+    id: str
+    players: List[str]
+    status: GameStatus
+
+    @classmethod
+    def from_game(cls, game: Game):
+        return cls(id=game.id, players=list(map(lambda p: p.id, game.players)), status=game.status)

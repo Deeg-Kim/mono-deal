@@ -1,9 +1,9 @@
 import uuid
-from typing import Annotated, Dict, Set
+from typing import Annotated, Dict, Set, List
 
 from fastapi import APIRouter, Depends
 
-from model.base import Game, GamePlayer, GameStatus
+from model.base import Game, GamePlayer, GameStatus, MinimalGame
 from model.exception import InvalidRequestError
 from model.games_api import AddPlayerRequest
 from storage.game_db import GamesDB, get_games_db
@@ -20,16 +20,36 @@ ALLOWED_GAME_STATUS_TRANSITIONS: Dict[GameStatus, Set[GameStatus]] = {
 }
 
 
+@router.get("", name="Query games", description="Query games by status")
+async def query_game(
+        status: GameStatus,
+        games_db: Annotated[GamesDB, Depends(get_games_db)]
+) -> List[MinimalGame]:
+    games = games_db.get_games_by_status(status)
+
+    return list(map(lambda g: MinimalGame.from_game(g), games))
+
+
 @router.post("", name="New Game", description="Initialize a new game")
 async def new_game(
         games_db: Annotated[GamesDB, Depends(get_games_db)]
-) -> Game:
+) -> MinimalGame:
     game_id = str(uuid.uuid4())
     game = Game(id=game_id, players=[], status=GameStatus.WAITING_FOR_PLAYERS, deck=BASE_DECK.copy())
 
     games_db.insert_game(game)
 
-    return game
+    return MinimalGame.from_game(game)
+
+
+@router.get("{id}", name="Get Game", description="Get game by id")
+async def get_game(
+        id: str,
+        games_db: Annotated[GamesDB, Depends(get_games_db)]
+) -> MinimalGame:
+    game = games_db.get_game(id)
+    
+    return MinimalGame.from_game(game)
 
 
 @router.put("/{id}/players", name="Add player", description="Add player to an existing game")
@@ -37,7 +57,7 @@ async def add_player(
         id: str,
         body: AddPlayerRequest,
         games_db: Annotated[GamesDB, Depends(get_games_db)]
-) -> Game:
+) -> MinimalGame:
     game = games_db.get_game(id)
 
     if len(game.players) >= MAX_PLAYERS_PER_GAME:
@@ -47,7 +67,7 @@ async def add_player(
     game.players.append(player)
     games_db.update_game(game)
 
-    return game
+    return MinimalGame.from_game(game)
 
 
 @router.post("/{id}/status", name="Change a game status", description="Change a game status")
@@ -56,7 +76,7 @@ async def start_game(
         to: GameStatus,
         games_db: Annotated[GamesDB, Depends(get_games_db)],
         state_machine_storage: Annotated[StateMachineStorage, Depends(get_state_machine_storage)]
-) -> Game:
+) -> MinimalGame:
     game = games_db.get_game(id)
 
     if to not in ALLOWED_GAME_STATUS_TRANSITIONS.get(game.status):
@@ -69,7 +89,7 @@ async def start_game(
         state_machine_storage.start_new_game(game)
         state_machine_storage.get_game_state_machine(game.id).action()
 
-    return game
+    return MinimalGame.from_game(game)
 
 
 @router.post("/{id}/turn", name="Take turn", description="Start a player turn")
@@ -77,18 +97,18 @@ async def start_turn(
         id: str,
         games_db: Annotated[GamesDB, Depends(get_games_db)],
         state_machine_storage: Annotated[StateMachineStorage, Depends(get_state_machine_storage)]
-) -> Game:
+) -> MinimalGame:
     game = games_db.get_game(id)
     state_machine_storage.get_game_state_machine(game.id).action()
 
-    return game
+    return MinimalGame.from_game(game)
 
 
 @router.post("/{id}/action", name="Take action", description="Reflect a player action")
 async def take_turn(
         id: str,
         games_db: Annotated[GamesDB, Depends(get_games_db)],
-) -> Game:
+) -> MinimalGame:
     pass
 
 
