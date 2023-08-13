@@ -14,6 +14,16 @@
       "color": "green",
       "full_set": 3,
       "rent": [2, 4, 7]
+    },
+    {
+      "color": "light_blue",
+      "full_set": 3,
+      "rent": [1, 2, 3]
+    },
+    {
+      "color": "orange",
+      "full_set": 3,
+      "rent": [1, 3, 5]
     }
   ],
   "cards": [
@@ -58,6 +68,42 @@
       "cash_value": 4,
       "family": "green",
       "name": "Pennsylvania Avenue"
+    },
+    {
+      "type": "property",
+      "cash_value": 1,
+      "family": "light_blue",
+      "name": "Connecticut Avenue"
+    },
+    {
+      "type": "property",
+      "cash_value": 1,
+      "family": "light_blue",
+      "name": "Oriental Avenue"
+    },
+    {
+      "type": "property",
+      "cash_value": 1,
+      "family": "light_blue",
+      "name": "Vermont Avenue"
+    },
+    {
+      "type": "property",
+      "cash_value": 2,
+      "family": "orange",
+      "name": "New York Avenue"
+    },
+    {
+      "type": "property",
+      "cash_value": 2,
+      "family": "orange",
+      "name": "St. James Place"
+    },
+    {
+      "type": "property",
+      "cash_value": 2,
+      "family": "orange",
+      "name": "Tennessee Avenue"
     }
   ]
 }

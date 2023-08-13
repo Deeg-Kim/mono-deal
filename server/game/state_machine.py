@@ -12,6 +12,8 @@ class GameInitialState(State):
         super().__init__("GAME_INITIALIZED")
 
     def evaluate(self, action_context: Optional[ActionContext]) -> str:
+        self.game.deck.shuffle()
+
         for player in self.game.players:
             for i in range(STARTING_HAND_SIZE):
                 player.add_to_hand(self.game.deck.draw())
