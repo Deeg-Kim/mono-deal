@@ -1,7 +1,7 @@
 import random
 from abc import abstractmethod
 from enum import Enum
-from typing import List, Dict
+from typing import List, Dict, Union
 
 from pydantic import BaseModel
 
@@ -9,18 +9,20 @@ from model.exception import InvalidGameStateError, NotFoundError
 
 
 class CardType(Enum):
-    PROPERTY = "property"
     ACTION = "action"
+    PROPERTY = "property"
+    PROPERTY_WILDCARD = "property_wildcard"
+    RENT = "rent"
+    MONEY = "money"
 
 
-class Card(BaseModel):
+class CardBase(BaseModel):
     unique_id: str
     type: CardType
     cash_value: int
 
-    @abstractmethod
     def get_name(self) -> str:
-        raise NotImplementedError
+        return self.unique_id
 
 
 class PropertyCardFamily(BaseModel):
@@ -29,12 +31,27 @@ class PropertyCardFamily(BaseModel):
     rent: List[int]
 
 
-class PropertyCard(Card):
+class PropertyCard(CardBase):
     family: PropertyCardFamily
     name: str
 
     def get_name(self):
         return self.unique_id + ": " + self.name
+
+
+class PropertyWildcardCard(CardBase):
+    families: List[PropertyCardFamily]
+
+
+class RentCard(CardBase):
+    families: List[PropertyCardFamily]
+
+
+class MoneyCard(CardBase):
+    pass
+
+
+Card = Union[PropertyCard, PropertyWildcardCard, RentCard, MoneyCard]
 
 
 class Deck(BaseModel):

@@ -23,7 +23,7 @@ ALLOWED_GAME_STATUS_TRANSITIONS: Dict[GameStatus, Set[GameStatus]] = {
 @router.post("", name="New Game", description="Initialize a new game")
 async def new_game(
         games_db: Annotated[GamesDB, Depends(get_games_db)]
-):
+) -> Game:
     game_id = str(uuid.uuid4())
     game = Game(id=game_id, players=[], status=GameStatus.WAITING_FOR_PLAYERS, deck=BASE_DECK.copy())
 

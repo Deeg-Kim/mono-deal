@@ -117,6 +117,29 @@
       "cash_value": 2,
       "family": "orange",
       "name": "Tennessee Avenue"
+    },
+    {
+      "unique_id": "wc_blue_green",
+      "type": "property_wildcard",
+      "cash_value": 4,
+      "families": ["blue", "green"]
+    },
+    {
+      "unique_id": "rent_blue_green_01",
+      "type": "rent",
+      "cash_value": 1,
+      "families": ["blue", "green"]
+    },
+    {
+      "unique_id": "rent_blue_green_02",
+      "type": "rent",
+      "cash_value": 1,
+      "families": ["blue", "green"]
+    },
+    {
+      "unique_id": "money_10",
+      "type": "money",
+      "cash_value": 10
     }
   ]
 }
