@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Any
+from typing import List
 
 from pydantic import BaseModel
 
@@ -11,6 +11,7 @@ class CardType(Enum):
 
 class Card(BaseModel):
     type: CardType
+    cash_value: int
 
 
 class PropertyCardFamily(BaseModel):

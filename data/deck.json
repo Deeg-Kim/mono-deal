@@ -14,11 +14,13 @@
   "cards": [
     {
       "type": "property",
+      "cash_value": 1,
       "family": "brown",
       "name": "Baltic Avenue"
     },
     {
       "type": "property",
+      "cash_value": 1,
       "family": "brown",
       "name": "Mediterranean Avenue"
     }

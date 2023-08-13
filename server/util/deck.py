@@ -22,7 +22,8 @@ def read_deck_from_file() -> Deck:
             if card_type == "property":
                 family = families[json_card["family"]]
                 name = json_card["name"]
-                card = PropertyCard(type=CardType.PROPERTY, family=family, name=name)
+                cash_value = json_card["cash_value"]
+                card = PropertyCard(type=CardType.PROPERTY, cash_value=cash_value, family=family, name=name)
                 deck.add_card(card)
 
     print(deck)
