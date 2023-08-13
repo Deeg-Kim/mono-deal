@@ -1,11 +1,11 @@
 import random
 from abc import abstractmethod
 from enum import Enum
-from typing import List
+from typing import List, Dict
 
 from pydantic import BaseModel
 
-from model.exception import InvalidGameStateError
+from model.exception import InvalidGameStateError, NotFoundError
 
 
 class CardType(Enum):
@@ -14,6 +14,7 @@ class CardType(Enum):
 
 
 class Card(BaseModel):
+    unique_id: str
     type: CardType
     cash_value: int
 
@@ -33,15 +34,17 @@ class PropertyCard(Card):
     name: str
 
     def get_name(self):
-        return self.name
+        return self.unique_id + ": " + self.name
 
 
 class Deck(BaseModel):
-    cards: List[Card]
-    discard_pile: List[Card]
+    cards: List[Card] = []
+    discard_pile: List[Card] = []
+    cards_by_id: Dict[str, Card] = {}
 
     def add_card(self, card: Card):
         self.cards.append(card)
+        self.cards_by_id[card.unique_id] = card
 
     def shuffle(self):
         random.shuffle(self.cards)
@@ -58,6 +61,9 @@ class Deck(BaseModel):
 
     def discard(self, card: Card):
         self.discard_pile.append(card)
+
+    def get_card_by_id(self, card_id: str) -> Card:
+        return self.cards_by_id[card_id]
 
 
 class GamePlayer(BaseModel):
@@ -92,3 +98,12 @@ class Game(BaseModel):
             self.current_player_idx = 0
         else:
             self.current_player_idx += 1
+
+    def get_player_by_id(self, player_id: str) -> GamePlayer:
+        # Could we store player id to dict? Yes, but lazy and don't want to pollute the model, and there will only be
+        # up to 5 or so players anyway
+        for player in self.players:
+            if player.id == player_id:
+                return player
+
+        raise NotFoundError(f"No player with id {player_id}")

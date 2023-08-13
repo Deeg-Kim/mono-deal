@@ -72,9 +72,31 @@ async def start_game(
     return game
 
 
-@router.post("/{id}/turn", name="Take turn", description="Reflect a player action")
+@router.post("/{id}/turn", name="Take turn", description="Start a player turn")
+async def start_turn(
+        id: str,
+        games_db: Annotated[GamesDB, Depends(get_games_db)],
+        state_machine_storage: Annotated[StateMachineStorage, Depends(get_state_machine_storage)]
+) -> Game:
+    game = games_db.get_game(id)
+    state_machine_storage.get_game_state_machine(game.id).action()
+
+    return game
+
+
+@router.post("/{id}/action", name="Take action", description="Reflect a player action")
 async def take_turn(
         id: str,
         games_db: Annotated[GamesDB, Depends(get_games_db)],
 ) -> Game:
     pass
+
+
+@router.get("/{id}/player/{player_id}", name="Get player hand", description="Get a player's hand within a hand")
+async def start_game(
+        id: str,
+        player_id: str,
+        games_db: Annotated[GamesDB, Depends(get_games_db)]
+) -> GamePlayer:
+    game = games_db.get_game(id)
+    return game.get_player_by_id(player_id)

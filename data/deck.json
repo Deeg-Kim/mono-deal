@@ -28,78 +28,91 @@
   ],
   "cards": [
     {
+      "unique_id": "property-01",
       "type": "property",
       "cash_value": 1,
       "family": "brown",
       "name": "Baltic Avenue"
     },
     {
+      "unique_id": "property-02",
       "type": "property",
       "cash_value": 1,
       "family": "brown",
       "name": "Mediterranean Avenue"
     },
     {
+      "unique_id": "property-03",
       "type": "property",
       "cash_value": 4,
       "family": "blue",
       "name": "Boardwalk"
     },
     {
+      "unique_id": "property-04",
       "type": "property",
       "cash_value": 4,
       "family": "blue",
       "name": "Park Place"
     },
     {
+      "unique_id": "property-05",
       "type": "property",
       "cash_value": 4,
       "family": "green",
       "name": "North Carolina Avenue"
     },
     {
+      "unique_id": "property-06",
       "type": "property",
       "cash_value": 4,
       "family": "green",
       "name": "Pacific Avenue"
     },
     {
+      "unique_id": "property-07",
       "type": "property",
       "cash_value": 4,
       "family": "green",
       "name": "Pennsylvania Avenue"
     },
     {
+      "unique_id": "property-08",
       "type": "property",
       "cash_value": 1,
       "family": "light_blue",
       "name": "Connecticut Avenue"
     },
     {
+      "unique_id": "property-09",
       "type": "property",
       "cash_value": 1,
       "family": "light_blue",
       "name": "Oriental Avenue"
     },
     {
+      "unique_id": "property-10",
       "type": "property",
       "cash_value": 1,
       "family": "light_blue",
       "name": "Vermont Avenue"
     },
     {
+      "unique_id": "property-11",
       "type": "property",
       "cash_value": 2,
       "family": "orange",
       "name": "New York Avenue"
     },
     {
+      "unique_id": "property-12",
       "type": "property",
       "cash_value": 2,
       "family": "orange",
       "name": "St. James Place"
     },
     {
+      "unique_id": "property-13",
       "type": "property",
       "cash_value": 2,
       "family": "orange",
