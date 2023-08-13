@@ -1,13 +1,13 @@
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
-from model.base import Game, GamePlayer
+from model.base import Game, GamePlayer, GameStatus
 from model.exception import InvalidRequestError
 from model.games_api import AddPlayerRequest
 from storage.game_db import GamesDB, get_games_db
-from util.consts import MAX_PLAYERS_PER_GAME
+from util.consts import MAX_PLAYERS_PER_GAME, DEFAULT_TURN_COUNT
 
 router = APIRouter(prefix="/game")
 
@@ -17,7 +17,7 @@ async def new_game(
         games_db: Annotated[GamesDB, Depends(get_games_db)]
 ):
     game_id = str(uuid.uuid4())
-    game = Game(id=game_id, players=[])
+    game = Game(id=game_id, players=[], status=GameStatus.WAITING_FOR_PLAYERS)
 
     games_db.insert_game(game)
 
@@ -35,7 +35,7 @@ async def add_player(
     if len(game.players) >= MAX_PLAYERS_PER_GAME:
         raise InvalidRequestError(f"Cannot have more than {MAX_PLAYERS_PER_GAME} players per game")
 
-    player = GamePlayer(id=body.player_id, hand=[], played_hand=[])
+    player = GamePlayer(id=body.player_id, hand=[], played_hand=[], next_turn_count=DEFAULT_TURN_COUNT)
     game.players.append(player)
     games_db.update_game(game)
 
