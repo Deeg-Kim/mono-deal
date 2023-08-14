@@ -2,12 +2,9 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Dict, Optional, List
 
+from model.base import Context
 
 logger = logging.getLogger(__name__)
-
-
-class ActionContext(ABC):
-    pass
 
 
 class State(ABC):
@@ -19,7 +16,7 @@ class State(ABC):
         self.state_id = state_id
 
     @abstractmethod
-    def evaluate(self, action_context: Optional[ActionContext]) -> str:
+    def evaluate(self, action_context: Optional[Context]) -> str:
         raise NotImplementedError
 
 
@@ -39,7 +36,7 @@ class StateMachine(ABC):
         self.transitions = transitions
         self.current_state_id = initial_state
 
-    def action(self, action_context: Optional[ActionContext] = None):
+    def action(self, action_context: Optional[Context] = None):
         action = self.states[self.current_state_id].evaluate(action_context)
         next_state_id = self.transitions[self.current_state_id][action]
         print(f"[{self.current_state_id}] --[{action}]--> [{next_state_id}]")

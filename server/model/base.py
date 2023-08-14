@@ -1,11 +1,18 @@
 import random
-from abc import abstractmethod
 from enum import Enum
 from typing import List, Dict, Union
 
 from pydantic import BaseModel
 
 from model.exception import InvalidGameStateError, NotFoundError
+
+
+class User(BaseModel):
+    id: str
+    first_name: str
+    last_name: str
+    email: str
+    password: str
 
 
 class CardType(Enum):
@@ -134,3 +141,19 @@ class MinimalGame(BaseModel):
     @classmethod
     def from_game(cls, game: Game):
         return cls(id=game.id, players=list(map(lambda p: p.id, game.players)), status=game.status)
+
+
+class ActionContext(BaseModel):
+    player_id: str
+
+
+class GameActionType(Enum):
+    PLAY_PROPERTY = "play_property"
+
+
+class GameAction(ActionContext):
+    card_id: str
+    action: GameActionType
+
+
+Context = Union[GameAction]

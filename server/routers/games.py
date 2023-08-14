@@ -11,7 +11,7 @@ from storage.state_machine_storage import StateMachineStorage, get_state_machine
 from util.consts import MAX_PLAYERS_PER_GAME, DEFAULT_TURN_COUNT
 from util.deck import BASE_DECK
 
-router = APIRouter(prefix="/game")
+router = APIRouter(prefix="/game", tags=["game"])
 
 
 ALLOWED_GAME_STATUS_TRANSITIONS: Dict[GameStatus, Set[GameStatus]] = {
@@ -42,13 +42,13 @@ async def new_game(
     return MinimalGame.from_game(game)
 
 
-@router.get("{id}", name="Get Game", description="Get game by id")
+@router.get("/{id}", name="Get Game", description="Get game by id")
 async def get_game(
         id: str,
         games_db: Annotated[GamesDB, Depends(get_games_db)]
 ) -> MinimalGame:
     game = games_db.get_game(id)
-    
+
     return MinimalGame.from_game(game)
 
 

@@ -2,10 +2,11 @@ from fastapi import FastAPI
 from starlette.responses import PlainTextResponse
 
 from model.exception import NotFoundError, InvalidRequestError
-from routers import games
+from routers import games, users
 
 app = FastAPI()
 app.include_router(games.router)
+app.include_router(users.router)
 
 
 @app.exception_handler(NotFoundError)

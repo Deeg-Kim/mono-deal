@@ -1,7 +1,7 @@
 from typing import Optional
 
 from model.base import Game
-from model.state_machine_model import StateMachine, State, ActionContext
+from model.state_machine_model import Context, State, StateMachine
 from util.consts import STARTING_HAND_SIZE, DRAW_PER_TURN
 
 
@@ -11,7 +11,7 @@ class GameInitialState(State):
         self.game = game
         super().__init__("GAME_INITIALIZED")
 
-    def evaluate(self, action_context: Optional[ActionContext]) -> str:
+    def evaluate(self, action_context: Optional[Context]) -> str:
         self.game.deck.shuffle()
 
         for player in self.game.players:
@@ -27,7 +27,7 @@ class CurrentPlayerDrawState(State):
         self.game = game
         super().__init__("CURRENT_PLAYER_DRAW")
 
-    def evaluate(self, action_context: Optional[ActionContext]) -> str:
+    def evaluate(self, action_context: Optional[Context]) -> str:
         current_player = self.game.get_current_player()
 
         for i in range(DRAW_PER_TURN):
@@ -42,7 +42,7 @@ class StartTurnState(State):
         self.game = game
         super().__init__("START_TURN")
 
-    def evaluate(self, action_context: Optional[ActionContext]) -> str:
+    def evaluate(self, action_context: Optional[Context]) -> str:
         pass
 
 
