@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from model.base import User
+
 
 class RegisterUserRequest(BaseModel):
     first_name: str
@@ -11,3 +13,9 @@ class RegisterUserRequest(BaseModel):
 class LoginUserRequest(BaseModel):
     email: str
     password: str
+
+
+class LoginUserResponse(BaseModel):
+    token: str
+    expiry: int
+    user: User

@@ -1,13 +1,15 @@
+import datetime
 import hashlib
+import math
 import uuid
-from typing import Annotated, Dict
+from typing import Annotated
 
 import jwt
 from fastapi import APIRouter, Depends
 
 from model.base import User
 from model.exception import InvalidRequestError, NotFoundError, UnauthorizedError
-from model.users_api import RegisterUserRequest, LoginUserRequest
+from model.users_api import RegisterUserRequest, LoginUserRequest, LoginUserResponse
 from storage.user_db import UsersDB, get_users_db
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -15,6 +17,7 @@ router = APIRouter(prefix="/user", tags=["user"])
 
 # TODO: Store this somewhere
 JWT_SECRET = "secret"
+EXPIRY_DURATION = datetime.timedelta(minutes=5)
 
 
 @router.get("/{id}", name="Get user by ID", description="Get user by id")
@@ -54,7 +57,7 @@ async def register_user(
 async def login_user(
         body: LoginUserRequest,
         users_db: Annotated[UsersDB, Depends(get_users_db)]
-) -> Dict[str, str]:
+) -> LoginUserResponse:
     user = users_db.get_user_by_email(body.email)
 
     if user is None:
@@ -63,7 +66,14 @@ async def login_user(
     if user.password != hashlib.md5(body.password.encode()).hexdigest():
         raise UnauthorizedError(f"Incorrect password")
 
-    token = {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "email": user.email}
+    expiry = math.floor((datetime.datetime.now() + EXPIRY_DURATION).timestamp()  * 1000)
+    token = {
+        "id": user.id,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "iat": expiry
+    }
     encoded = jwt.encode(token, JWT_SECRET, algorithm="HS256")
 
-    return {"token": encoded}
+    return LoginUserResponse(token=encoded, expiry=expiry, user=user)
