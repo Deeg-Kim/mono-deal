@@ -6,3 +6,8 @@ class RegisterUserRequest(BaseModel):
     last_name: str
     email: str
     password: str
+
+
+class LoginUserRequest(BaseModel):
+    email: str
+    password: str

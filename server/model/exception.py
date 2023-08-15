@@ -8,3 +8,7 @@ class InvalidRequestError(Exception):
 
 class InvalidGameStateError(Exception):
     pass
+
+
+class UnauthorizedError(Exception):
+    pass

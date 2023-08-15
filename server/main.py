@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.responses import PlainTextResponse
 
-from model.exception import NotFoundError, InvalidRequestError
+from model.exception import NotFoundError, InvalidRequestError, UnauthorizedError
 from routers import games, users
 
 app = FastAPI()
@@ -17,3 +17,8 @@ async def validation_exception_handler(request, exc):
 @app.exception_handler(InvalidRequestError)
 async def validation_exception_handler(request, exc):
     return PlainTextResponse(str(exc), status_code=400)
+
+
+@app.exception_handler(UnauthorizedError)
+async def validation_exception_handler(request, exc):
+    return PlainTextResponse(str(exc), status_code=401)
